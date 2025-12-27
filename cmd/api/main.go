@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gustavooarantes/Blog/internal/env"
+	"github.com/gustavooarantes/Blog/internal/store"
 	"github.com/joho/godotenv"
 )
 
@@ -18,11 +19,14 @@ func main() {
 		addr: env.GetString("ADDR", ":8080"),
 	}
 
+	store := store.NewPostgresStorage(nil)
+
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
 
 	app := &application{
 		config: cfg,
 		logger: logger,
+		store:  store,
 	}
 
 	mux := app.mount()
